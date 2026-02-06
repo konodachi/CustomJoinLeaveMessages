@@ -1,0 +1,21 @@
+# This is the default configuration file. Make sure to have a backup before editing.
+
+server-name: PlaceHolderSMP
+first-time-message: "Welcome to %server-name%, %player-name%!"
+
+# Put the most important ranks in the top. The file is read top to bottom.
+roles:
+  owner-tier:
+    permission: customjoinleave.admin
+    join-message: "Welcome back, boss!"
+    leave-message: "Bye!"
+
+  vip-tier:
+    permission: customjoinleave.vip
+    join-message: "&6Welcome back, &4%player-name%&6! Thanks for your contributions!"
+    leave-message: "Bye!"
+
+  default:
+    permission: customjoinleave.default
+    join-message: "&a Welcome back, &4%player-name%&a!"
+    leave-message: "Bye!"
