@@ -22,9 +22,9 @@ public class LeaveListener implements Listener {
         Player player = event.getPlayer();
 
         for (String role : permissions) {
-            if (player.hasPermission(role)) {
+            if (player.hasPermission(plugin.getConfig().getString("roles." + role + ".permission"))) {
                 String message = plugin.getConfig()
-                        .getConfigurationSection("roles." + role + ".leave-message").getString(role)
+                        .getConfigurationSection("roles." + role + ".join-message").getString(role)
                         .replace("%player-name%", player.getDisplayName())
                         .replace("%server-name%", plugin.getConfig().getString("server-name"));
                 event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', message));

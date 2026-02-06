@@ -23,11 +23,11 @@ public class JoinListener implements Listener {
         Player player = event.getPlayer();
         if (!player.hasPlayedBefore()) {
             String message = plugin.getConfig().getString("first-time-message");
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message));
             return;
         }
         for (String role : permissions) {
-            if (player.hasPermission(role)) {
+            if (player.hasPermission(plugin.getConfig().getString("roles." + role + ".permission"))) {
                 String message = plugin.getConfig()
                         .getConfigurationSection("roles." + role + ".join-message").getString(role)
                         .replace("%player-name%", player.getDisplayName())
