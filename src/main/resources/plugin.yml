@@ -2,3 +2,8 @@ name: CustomJoinLeaveMessages
 version: '0.01'
 main: me.konodachi.customJoinLeaveMessages.CustomJoinLeaveMessages
 api-version: '1.21'
+
+permissions:
+  customjoinleave.default:
+    description: A permission that everyone has by default
+    default: true
