@@ -27,7 +27,7 @@ public class LeaveListener implements Listener {
                         .getConfigurationSection("roles." + role + ".leave-message").getString(role)
                         .replace("%player-name%", player.getDisplayName())
                         .replace("%server-name%", plugin.getConfig().getString("server-name"));
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', message));
                 return;
             }
         }

@@ -32,7 +32,7 @@ public class JoinListener implements Listener {
                         .getConfigurationSection("roles." + role + ".join-message").getString(role)
                         .replace("%player-name%", player.getDisplayName())
                         .replace("%server-name%", plugin.getConfig().getString("server-name"));
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message));
                 return;
             }
         }
