@@ -28,7 +28,7 @@ public class JoinListener implements Listener {
         Player player = event.getPlayer();
         if (!player.hasPlayedBefore()) {
             String message = plugin.getConfig().getString("first-time-message", "Welcome to %server-name%, %player-name%!")
-                    .replace("%server-name%", plugin.getServer().getName())
+                    .replace("%server-name%", plugin.getConfig().getString("server-name", "PlaceHolderSMP"))
                     .replace("%player-name%", player.getName());
             event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message));
             return;
