@@ -6,27 +6,32 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 import java.util.Set;
 
 public class LeaveListener implements Listener {
-    CustomJoinLeaveMessages plugin =  CustomJoinLeaveMessages.getInstance();
+    CustomJoinLeaveMessages plugin;
+    Set<String> permissions;
 
-    Set<String> permissions =
-            Objects.requireNonNull(
-                    plugin.getConfig().getConfigurationSection("roles")).getKeys(false);
+    public LeaveListener(@NonNull CustomJoinLeaveMessages plugin) {
+        this.plugin = plugin;
+        permissions = Objects.requireNonNull(plugin.getConfig().getConfigurationSection("roles")).getKeys(false);
+    }
+
+
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event){
         Player player = event.getPlayer();
 
         for (String role : permissions) {
-            if (player.hasPermission(plugin.getConfig().getString("roles." + role + ".permission"))) {
+            if (player.hasPermission(plugin.getConfig().getString("roles." + role + ".permission", "customjoinleave.default"))) {
                 String message = plugin.getConfig()
-                        .getConfigurationSection("roles." + role + ".join-message").getString(role)
+                        .getString("roles." + role + ".leave-message", "")
                         .replace("%player-name%", player.getDisplayName())
-                        .replace("%server-name%", plugin.getConfig().getString("server-name"));
+                        .replace("%server-name%", plugin.getConfig().getString("server-name", "PlaceHolderSMP"));
                 event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', message));
                 return;
             }

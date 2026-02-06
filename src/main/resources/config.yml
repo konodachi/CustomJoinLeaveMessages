@@ -17,5 +17,5 @@ roles:
 
   default:
     permission: customjoinleave.default
-    join-message: "&a Welcome back, &4%player-name%&a!"
+    join-message: "&aWelcome back, &4%player-name%&a!"
     leave-message: "Bye!"
