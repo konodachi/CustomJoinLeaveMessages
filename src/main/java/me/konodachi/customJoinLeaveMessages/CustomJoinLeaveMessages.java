@@ -1,5 +1,6 @@
 package me.konodachi.customJoinLeaveMessages;
 
+import me.konodachi.customJoinLeaveMessages.Commands.ReloadConfigCommand;
 import me.konodachi.customJoinLeaveMessages.Listeners.JoinListener;
 import me.konodachi.customJoinLeaveMessages.Listeners.LeaveListener;
 import org.bukkit.configuration.Configuration;
@@ -18,21 +19,29 @@ public final class CustomJoinLeaveMessages extends JavaPlugin {
     List<Role> roles;
     Configuration config;
     Configuration defaultConfig;
+    JoinListener joinListener;
+    LeaveListener leaveListener;
 
     @Override
     public void onEnable() {
-
         saveDefaultConfig();
         loadConfig();
+        joinListener = new JoinListener(roles, config);
+        leaveListener = new LeaveListener(roles, config);
 
-        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
+        getServer().getPluginManager().registerEvents(joinListener, this);
+        getServer().getPluginManager().registerEvents(leaveListener, this);
+
+        getCommand("reloadConfig").setExecutor(new ReloadConfigCommand(this, joinListener, leaveListener));
 
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    public Configuration getConfiguration(){
+        return config;
+    }
+
+    public List<Role> getRoles(){
+        return roles;
     }
 
     public void loadConfig(){
