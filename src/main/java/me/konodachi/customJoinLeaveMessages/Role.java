@@ -1,6 +1,6 @@
 package me.konodachi.customJoinLeaveMessages;
 
-public class Role {
+public class Role implements Comparable<Role>{
     private String name;
     private String permission;
     private String joinMessage;
@@ -37,5 +37,18 @@ public class Role {
 
     public void setLeaveMessage(String leaveMessage) {
         this.leaveMessage = leaveMessage;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    @Override
+    public int compareTo(Role o) {
+        return priority - o.getPriority();
     }
 }
