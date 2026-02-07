@@ -1,48 +1,47 @@
 package me.konodachi.customJoinLeaveMessages.Listeners;
 
-import me.konodachi.customJoinLeaveMessages.CustomJoinLeaveMessages;
-import org.bukkit.Bukkit;
+import me.konodachi.customJoinLeaveMessages.Role;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.jspecify.annotations.NonNull;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 
 public class JoinListener implements Listener {
-    CustomJoinLeaveMessages plugin;
-    Set<String> permissions;
+    Configuration config;
+    List<Role> roles;
 
-    public JoinListener(@NonNull CustomJoinLeaveMessages plugin) {
-        this.plugin = plugin;
-        permissions = Objects.requireNonNull(plugin.getConfig().getConfigurationSection("roles")).getKeys(false);
+    public JoinListener(List<Role> rolesInput, Configuration configInput){
+        updateConfig(rolesInput, configInput);
     }
 
-
+    public void updateConfig(List<Role> rolesInput, Configuration configInput){
+        this.roles = rolesInput;
+        this.config = configInput;
+    }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoinEvent(PlayerJoinEvent event){
         Player player = event.getPlayer();
-        if (!player.hasPlayedBefore()) {
-            String message = plugin.getConfig().getString("first-time-message", "Welcome to %server-name%, %player-name%!")
-                    .replace("%server-name%", plugin.getConfig().getString("server-name", "PlaceHolderSMP"))
-                    .replace("%player-name%", player.getName());
+
+        if (!player.hasPlayedBefore()){
+            String message = config.getString("first-time-message", "Welcome to %server-name%, %player-name%!")
+                            .replace("%player-name%", player.getDisplayName())
+                            .replace("%server-name%", config.getString("server-name", "PlaceHolderSMP"));
             event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message));
             return;
         }
-        for (String role : permissions) {
-            if (player.hasPermission(plugin.getConfig().getString("roles." + role + ".permission", "customjoinleave.default"))) {
-                String message = plugin.getConfig()
-                        .getString("roles." + role + ".join-message", "&aWelcome back, &4%player-name%&a!")
-                        .replace("%player-name%", player.getDisplayName())
-                        .replace("%server-name%", plugin.getConfig().getString("server-name", "PlaceHolderSMP"));
-                event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message));
-                return;
-            }
-        }
 
+        for (Role role: roles){
+            if (!player.hasPermission(role.getPermission())) continue;
+            String message = role.getJoinMessage()
+                            .replace("%player-name%", player.getDisplayName())
+                            .replace("%server-name%", config.getString("server-name", "PlaceHolderSMP"));
+            event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message));
+            return;
+        }
     }
 }
