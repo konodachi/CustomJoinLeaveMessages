@@ -1,28 +1,29 @@
 # CustomJoinLeaveMessages
 
-![Java](https://img.shields.io/badge/Java-21-orange) ![Spigot](https://img.shields.io/badge/Platform-Spigot%201.21-lightgrey) ![License](https://img.shields.io/badge/License-MIT-blue)
-
-A lightweight, high-performance Spigot plugin that manages join and leave messages based on player permissions. Designed for server owners who need granular control over chat aesthetics without the bloat of massive essentials plugins.
+A resilient, high-performance Spigot plugin that manages join and leave messages based on player permissions. Designed for server owners who need granular control over chat aesthetics without the bloat of massive essentials plugins.
 
 ## ⚡ Features
 
-* **Rank-Based Messages:** Assign unique join/leave messages to different permission groups (Owner, VIP, Default, etc.).
-* **First-Join Support:** Special welcome broadcast for players joining for the first time.
-* **Hex/Color Support:** Fully supports standard color codes (`&a`, `&l`, etc.).
-* **Lightweight:** No database required. Loads config once at startup for maximum performance.
-* **Fail-Safe:** Built-in default values ensure the plugin never crashes, even if configuration entries are missing.
+* **Rank-Based Messages:** Assign unique join/leave messages to different permission groups.
+* **Priority System:** Uses a numeric priority system (Lower = Higher Priority) to ensure admins don't get the "Default" message.
+* **Safe Mode Architecture:** If your `config.yml` breaks or goes missing, the plugin automatically switches to a **Memory-Only Fallback** state to prevent server crashes, while keeping your broken file intact for repairs.
+* **Hex/Color Support:** Fully supports standard color codes (`&a`, `&l`) and formatting.
+* **Performance:** Loads data into RAM on startup. Zero disk reading during player joins.
 
 ## 🛠️ Installation
 
-1.  Download the latest `.jar` release.
-2.  Drop it into your server's `plugins/` folder.
-3.  Restart the server.
-4.  Edit `plugins/CustomJoinLeaveMessages/config.yml` to customize your messages.
-5.  Restart or reload to apply changes.
+1. Download the latest `.jar` release.
+2. Drop it into your server's `plugins/` folder.
+3. Restart the server.
+4. Edit `plugins/CustomJoinLeaveMessages/config.yml` to customize your messages.
+5. Run `/reloadConfig` to apply changes instantly.
 
 ## ⚙️ Configuration
 
-The plugin reads roles from **top to bottom**. Place your highest priority ranks (e.g., Owner, Admin) at the top of the list.
+The plugin uses a **Priority System**.
+
+* **Lower Number = Higher Priority.**
+* Example: A player with `priority: 0` (Owner) and `priority: 2` (Default) will show the Owner message.
 
 ```yaml
 # This is the default configuration file. Make sure to have a backup before editing.
@@ -30,19 +31,32 @@ The plugin reads roles from **top to bottom**. Place your highest priority ranks
 server-name: PlaceHolderSMP
 first-time-message: "Welcome to %server-name%, %player-name%!"
 
-# Put the most important ranks in the top. The file is read top to bottom.
 roles:
+  # Highest Priority (0 checks before 1)
   owner-tier:
     permission: customjoinleave.admin
     join-message: "Welcome back, boss!"
     leave-message: "Bye!"
+    priority: 0
 
   vip-tier:
     permission: customjoinleave.vip
     join-message: "&6Welcome back, &4%player-name%&6! Thanks for your contributions!"
     leave-message: "Bye!"
+    priority: 1
 
+  # Lowest Priority (Fallback)
   default:
     permission: customjoinleave.default
     join-message: "&aWelcome back, &4%player-name%&a!"
     leave-message: "Bye!"
+    priority: 10
+
+```
+
+## 📜 Commands & Permissions
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/reloadConfig` | `customjoinleave.reloadConfig` | Reloads the configuration file from disk. |
+| (Passive) | `customjoinleave.default` | Given to all players by default. |
