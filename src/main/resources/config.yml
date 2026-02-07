@@ -9,13 +9,16 @@ roles:
     permission: customjoinleave.admin
     join-message: "Welcome back, boss!"
     leave-message: "Bye!"
+    priority: 0
 
   vip-tier:
     permission: customjoinleave.vip
     join-message: "&6Welcome back, &4%player-name%&6! Thanks for your contributions!"
     leave-message: "Bye!"
+    priority: 1
 
   default:
     permission: customjoinleave.default
     join-message: "&aWelcome back, &4%player-name%&a!"
     leave-message: "Bye!"
+    priority: 2
