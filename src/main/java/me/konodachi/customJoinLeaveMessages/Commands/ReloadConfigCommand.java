@@ -23,7 +23,7 @@ public class ReloadConfigCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NonNull CommandSender commandSender, @NonNull Command command, @NonNull String s, String @NonNull [] strings) {
         if (commandSender instanceof Player p){
-            if (!p.hasPermission("reloadConfig")){
+            if (!p.hasPermission("customJoinLeave.reloadConfig")){
                 return false;
             } else{
                 plugin.loadConfig();
