@@ -14,3 +14,9 @@ permissions:
   customjoinleave.reloadConfig:
     description: Allows one to call the /reloadconfig command
     default: op
+  customjoinleave.vip:
+    description: Permission for VIP users.
+    default: false
+  customjoinleave.admin:
+    description: Permission for mods/admins
+    default: op
