@@ -45,6 +45,7 @@ public final class CustomJoinLeaveMessages extends JavaPlugin {
     }
 
     public void loadConfig(){
+        reloadConfig();
         roles = new ArrayList<>();
         config = getConfig();
         defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource("config.yml")));
